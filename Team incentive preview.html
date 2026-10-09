@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Team incentive preview</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0a0a;--panel:#111214;--line:#25272b;--ink:#f2f3f5;--mute:#8d939c;--blue:#0a84ff;--green:#34c77b;--amber:#e0a21b;--red:#ff6b61;--chip:#1e2024;--field:#16181b;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]){--bg:#f6f7f9;--panel:#fff;--line:#e2e5ea;--ink:#14161a;--mute:#6a7078;--blue:#0a6fe0;--green:#12844a;--amber:#a86f00;--red:#c4342b;--chip:#eef0f3;--field:#fff}}
+:root[data-theme="light"]{--bg:#f6f7f9;--panel:#fff;--line:#e2e5ea;--ink:#14161a;--mute:#6a7078;--blue:#0a6fe0;--green:#12844a;--amber:#a86f00;--red:#c4342b;--chip:#eef0f3;--field:#fff}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,-apple-system,'Segoe UI',sans-serif;font-size:15px}
+main{max-width:1200px;margin:0 auto;padding:20px 16px 48px}
+.preview{display:flex;flex-wrap:wrap;gap:10px;align-items:center;background:var(--panel);border:1px dashed var(--line);border-radius:12px;padding:10px 14px;margin-bottom:18px;font-size:.85rem;color:var(--mute)}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.seg button{background:none;border:none;color:var(--mute);font:inherit;padding:7px 14px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--blue);color:#fff}
+.crumb{color:var(--mute);font-size:.85rem;margin-bottom:6px}
+h1{margin:0 0 4px;font-size:1.7rem}
+h2{font-size:1.05rem;margin:0 0 4px}
+.top{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
+.sub{color:var(--mute);margin:0}
+.badge{background:var(--chip);border-radius:999px;padding:5px 12px;font-size:.8rem;font-weight:600;display:inline-block}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin:14px 0 16px;overflow-x:auto}
+.tab{background:none;border:none;border-bottom:2px solid transparent;color:var(--mute);font:inherit;font-weight:600;padding:10px 14px;cursor:pointer;white-space:nowrap;margin-bottom:-1px}
+.tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--blue)}
+.count{background:var(--amber);color:#111;border-radius:999px;font-size:.7rem;padding:1px 7px;margin-left:6px}
+button:focus-visible,input:focus-visible{outline:2px solid var(--blue);outline-offset:1px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin-bottom:16px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px}
+.card small{color:var(--mute);display:block;margin-bottom:6px;font-size:.8rem}
+.card b{font-size:1.5rem;font-variant-numeric:tabular-nums}
+.card em{display:block;font-style:normal;color:var(--mute);font-size:.78rem;margin-top:4px}
+.card.g b{color:var(--green)}.card.a b{color:var(--amber)}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:16px;overflow-x:auto}
+.head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
+.note{color:var(--mute);font-size:.85rem;margin:0 0 12px;max-width:800px}
+table{width:100%;border-collapse:collapse;min-width:680px}
+th,td{padding:10px;text-align:right;border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums;white-space:nowrap;vertical-align:middle}
+th{font-weight:600;font-size:.8rem;color:var(--mute)}
+th:first-child,td:first-child,.l{text-align:left}
+tbody tr:last-child td{border-bottom:none}
+tfoot td{border-top:1px solid var(--line);border-bottom:none;font-weight:700}
+tr.sub td{background:var(--chip);font-size:.84rem;color:var(--mute);padding:7px 10px}
+.mute{color:var(--mute)}.small{font-size:.78rem}.pos{color:var(--green);font-weight:700}.neg{color:var(--red)}
+.chip{border-radius:999px;padding:3px 10px;font-size:.76rem;font-weight:600;background:var(--chip);display:inline-block}
+.chip.approved{color:var(--green)}.chip.pending,.chip.decision{color:var(--amber)}.chip.denied,.chip.rejected,.chip.na{color:var(--red)}
+.chip.Leader{color:var(--blue)}
+.b{font:inherit;font-size:.8rem;background:none;border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:6px 10px;cursor:pointer}
+.b.ok{border-color:var(--green);color:var(--green)}.b.no{border-color:var(--red);color:var(--red)}
+.b.link{border:none;color:var(--blue);padding:0}
+.in{font:inherit;font-size:.82rem;background:var(--field);border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:6px 8px;width:92px;text-align:right}
+.in.why{width:170px;text-align:left}
+.acts{display:flex;gap:6px;justify-content:flex-end;align-items:center;flex-wrap:wrap}
+.err{color:var(--red);font-size:.76rem;text-align:right;min-height:0}
+.err:not(:empty){margin-top:4px}
+.prog{position:relative;height:8px;background:var(--chip);border-radius:6px;min-width:180px}
+.prog i{display:block;height:100%;background:var(--green);border-radius:6px}
+.prog s{position:absolute;top:-3px;width:2px;height:14px;background:var(--mute)}
+.ticks{display:flex;justify-content:space-between;font-size:.72rem;color:var(--mute);margin-top:5px;min-width:180px}
+.bar{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+.rules{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 12px}
+.set{background:var(--panel);border:1px solid var(--blue);border-radius:16px;padding:16px;margin-bottom:16px}
+.set .row{display:flex;gap:14px;flex-wrap:wrap;align-items:flex-end}
+.set label{display:flex;flex-direction:column;gap:5px;font-size:.78rem;color:var(--mute)}
+.set .in{width:120px}
+.msg{font-size:.8rem;color:var(--green)}.msg.bad{color:var(--red)}
+.dl{margin-left:auto;border-color:var(--blue);color:var(--blue)}
+.card{position:relative;overflow:hidden}
+.card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--line)}
+.card.g::before{background:var(--green)}.card.a::before{background:var(--amber)}
+tbody tr:not(.sub):hover td{background:color-mix(in srgb,var(--blue) 6%,transparent)}
+th{text-transform:uppercase;letter-spacing:.04em;font-size:.72rem}
+.who{display:inline-flex;align-items:center;gap:9px;vertical-align:middle}
+.av{width:28px;height:28px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;color:var(--blue);background:color-mix(in srgb,var(--blue) 16%,transparent)}
+.chip.approved{background:color-mix(in srgb,var(--green) 14%,transparent)}
+.chip.pending,.chip.decision{background:color-mix(in srgb,var(--amber) 16%,transparent)}
+.chip.denied,.chip.rejected,.chip.na{background:color-mix(in srgb,var(--red) 14%,transparent)}
+.chip.Leader{background:color-mix(in srgb,var(--blue) 16%,transparent)}
+button.tag{border:none;font-family:inherit;cursor:pointer}button.tag:hover{filter:brightness(1.2)}
+.rank{display:inline-flex;min-width:34px;justify-content:center;border-radius:8px;padding:3px 6px;font-weight:700;font-size:.8rem;background:var(--chip)}
+.rank.r1{background:color-mix(in srgb,var(--amber) 24%,transparent);color:var(--amber)}
+.rank.r2,.rank.r3{background:color-mix(in srgb,var(--blue) 16%,transparent);color:var(--blue)}
+.set{border-color:color-mix(in srgb,var(--blue) 45%,var(--line));background:color-mix(in srgb,var(--blue) 5%,var(--panel))}
+.b{transition:background .12s}.b:hover{background:var(--chip)}
+.tab{transition:color .12s}.tab:hover{color:var(--ink)}
+.panel,.card,.set{box-shadow:0 1px 0 color-mix(in srgb,var(--ink) 4%,transparent)}
+@media (prefers-reduced-motion:reduce){.b,.tab{transition:none}}
+.amb{color:var(--amber);font-weight:600}
+</style>
+</head>
+<body>
+<main>
+  <div class="preview"><b style="color:var(--ink)">Preview with sample data.</b> View as:
+    <div class="seg" role="group" aria-label="View as"><button data-v="acc" aria-pressed="true">Accounts</button><button data-v="ref" aria-pressed="false">Refiller (Adarsh prajapati)</button><button data-v="lead" aria-pressed="false">Leader (kamal kumar)</button></div>
+    <span id="vnote"></span></div>
+
+  <div class="crumb">Team › Incentive</div>
+  <div class="top"><div><h1>Incentive</h1><p class="sub">Five incentive types, calculated from net refill and net sale</p></div>
+    <div><span class="badge">September 2026</span> <span class="badge" id="mstate"></span></div></div>
+  <div class="tabs" role="tablist" aria-label="Incentive types" id="tabs"></div>
+  <div id="view" role="tabpanel"></div>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"})[c]);
+/* All money is whole paise; only formatting turns it into rupees. */
+const inr=p=>"₹"+(p/100).toLocaleString("en-IN",{minimumFractionDigits:2,maximumFractionDigits:2});
+const toPaise=v=>{const m=/^\s*(\d+)(?:\.(\d{1,2}))?\s*$/.exec(v??"");return m?+m[1]*100+ +((m[2]||"")+"00").slice(0,2):null;};
+const toNum=v=>/^\s*\d+(\.\d{1,2})?\s*$/.test(v??"")?Number(v):null;
+/* Everything Accounts sets before the tables. Money in paise, rates in paise per unit. */
+const CFG={rate:{Leader:5,Refiller:3},rec:{ir:50000,is:50000,cr:100000,cs:100000},tier:[10000,25000,50000],prize:[100000,60000,40000,20000,10000],str:{bonus:200000}};
+const rs2=p=>String(p/100);
+const D={rate:{Leader:"5",Refiller:"3"},rec:Object.fromEntries(Object.entries(CFG.rec).map(([k,v])=>[k,rs2(v)])),tier:CFG.tier.map(rs2),prize:CFG.prize.map(rs2),str:{bonus:"2000"}},M={};
+const PCT=[10,20,30],KIND={ir:"Individual · net refill",is:"Individual · net sale",cr:"Cluster · net refill",cs:"Cluster · net sale"};
+const R=[{n:"Adarsh prajapati",role:"Refiller",ly:520,m:[["VK 2 Rajputana Hostel",512,70],["VK 2 Kasturba Girls Hostel",230,22]]},
+ {n:"Deepu Patel",role:"Refiller",ly:500,m:[["VK 2 Kasturba Girls Hostel",590,50]]},
+ {n:"kamal kumar",role:"Leader",ly:350,m:[["Kiosk Lobby",300,25],["Kiosk Canteen",155,20]]},
+ {n:"its_aniket",role:"Refiller",ly:400,m:[["City Hospital OPD",410,30]]}];
+function calc(){R.forEach(r=>{r.filled=r.m.reduce((a,x)=>a+x[1],0);r.removed=r.m.reduce((a,x)=>a+x[2],0);r.net=r.filled-r.removed;
+  r.inc=Math.round(r.net*CFG.rate[r.role]);r.g=(r.net-r.ly)/r.ly*100;
+  const hit=PCT.filter(p=>(r.net-r.ly)*100>=p*r.ly).length;r.ms=hit?CFG.tier[hit-1]:0;
+  r.next=hit<PCT.length?{pct:PCT[hit],bonus:CFG.tier[hit],need:r.ly+Math.ceil(PCT[hit]*r.ly/100)-r.net}:null;});}
+const recs=[{k:"ir",who:"Adarsh prajapati",cur:"650 units",base:"500 units",g:"+30.0%",status:"pending",to:["Adarsh prajapati"]},
+ {k:"is",who:"Deepu Patel",cur:"₹58,200",base:"₹51,000",g:"+14.1%",status:"pending",to:["Deepu Patel"]},
+ {k:"cr",who:"Hostel cluster",cur:"1,190 units",base:"1,020 units",g:"+16.7%",status:"pending",to:["Adarsh prajapati","Deepu Patel"]},
+ {k:"cs",who:"Hostel cluster",cur:"₹1,84,000",base:"₹1,52,000",g:"+21.1%",status:"pending",to:["Adarsh prajapati","Deepu Patel"]}];
+const strk=[{n:"Adarsh prajapati",days:30,work:30,half:0,leave:0,status:"pending"},
+ {n:"Deepu Patel",days:28,work:30,half:2,leave:0,status:"decision"},
+ {n:"kamal kumar",days:29,work:30,half:0,leave:1,status:"na"},
+ {n:"its_aniket",days:30,work:30,half:1,leave:0,status:"pending"}];
+const boards={daily:{label:"Daily · 30 Sep",rows:[["Deepu Patel",52],["Adarsh prajapati",48],["its_aniket",31],["kamal kumar",28]]},
+ weekly:{label:"Weekly · 22–28 Sep",rows:[["Adarsh prajapati",168],["Deepu Patel",151],["kamal kumar",120],["its_aniket",98]]},
+ monthly:{label:"Monthly · September",status:"pending",rows:[["Adarsh prajapati",650],["Deepu Patel",540],["kamal kumar",410],["its_aniket",380]]}};
+const MB=boards.monthly;
+{const flat=recs.flatMap(c=>c.to.map(n=>({...c,grp:c.to.length>1?c.who:null,who:n,cnt:c.to.length,to:[n]})));recs.length=0;recs.push(...flat);}
+const lbw=MB.rows.map(([n],i)=>({n,i,status:"pending"}));
+[...recs,...strk,...lbw].forEach(o=>o.orig=o.status==="approved"?"pending":o.status);
+const S={v:"acc",tab:"sum",bd:"monthly",open:{}};
+const TABS=[["sum","Summary"],["net","Net refill"],["rec","Record breaker"],["mil","Milestones"],["str","Streaks"],["lb","Leaderboard"]];
+const isAcc=()=>S.v==="acc",me=()=>S.v==="lead"?"kamal kumar":"Adarsh prajapati",vis=n=>isAcc()||n===me(),ok=s=>s==="approved",open=s=>s==="pending"||s==="decision";
+const LABEL={pending:"Pending Accounts",approved:"Approved",rejected:"Rejected",decision:"Needs decision",denied:"Denied",na:"Not eligible"};
+const who=n=>`<span class="who"><span class="av" aria-hidden="true">${n.split(/[\s_]+/).map(x=>x[0]).join("").slice(0,2).toUpperCase()}</span><b>${n}</b></span>`;
+const chip=s=>`<span class="chip ${s}">${LABEL[s]||s}</span>`;
+const tbl=(h,b,e,f)=>`<table><thead><tr>${h.map(x=>`<th scope="col">${x}</th>`).join("")}</tr></thead><tbody>${b||`<tr><td colspan="${h.length}" class="mute l">${e||"Nothing to show."}</td></tr>`}</tbody>${f?`<tfoot>${f}</tfoot>`:""}</table>`;
+const cards=a=>`<div class="cards">${a.map(([k,v,c,x])=>`<div class="card ${c||""}"><small>${k}</small><b>${v}</b>${x?`<em>${x}</em>`:""}</div>`).join("")}</div>`;
+const btn=(k,i,a,l,c)=>`<button class="b ${c||""}" data-a="${k}|${i}|${a}">${l}</button>`;
+const field=(k,i,f,o,ph,label,cls)=>`<input class="in ${cls||""}" ${cls?"":'inputmode="decimal"'} placeholder="${ph}" aria-label="${esc(label)}" data-d="${k}|${i}|${f}" value="${esc(o[f]||"")}">`;
+/* The box Accounts fills in before each table. */
+const setbox=(g,title,note,fields)=>`<div class="set"><h2>${title}</h2><p class="note">${note}</p><div class="row">${fields.map(([k,l])=>`<label>${l}<input class="in" inputmode="decimal" data-s="${g}|${k}" value="${esc(D[g][k])}"></label>`).join("")}<button class="b ok" data-save="${g}">Save</button><span class="msg ${M[g]&&M[g].bad?"bad":""}" role="status">${M[g]?M[g].t:""}</span></div></div>`;
+const recBonus=c=>ok(c.status)?c.bonus:CFG.rec[c.k];
+const pending=()=>({rec:recs.filter(c=>open(c.status)).length,str:strk.filter(s=>open(s.status)).length,lb:lbw.filter(o=>open(o.status)).length});
+
+function totals(){const t={};R.forEach(r=>t[r.n]={net:r.inc,ms:r.ms,rec:0,str:0,lb:0,p:{rec:0,str:0,lb:0},wait:[]});
+  const w=(n,x,tab)=>t[n].wait.some(y=>y[0]===x)||t[n].wait.push([x,tab]);
+  recs.forEach(c=>ok(c.status)?t[c.who].rec+=c.bonus:open(c.status)&&(w(c.who,"Record breaker","rec"),t[c.who].p.rec+=CFG.rec[c.k]));
+  strk.forEach(s=>ok(s.status)?t[s.n].str+=s.bonus:open(s.status)&&(w(s.n,"Streak","str"),t[s.n].p.str+=CFG.str.bonus));
+  lbw.forEach(o=>ok(o.status)?t[o.n].lb+=o.prize:open(o.status)&&(w(o.n,"Leaderboard","lb"),t[o.n].p.lb+=CFG.prize[o.i]));
+  Object.values(t).forEach(x=>x.total=x.net+x.ms+x.rec+x.str+x.lb);return t;}
+function view(){calc();const t=totals(),rs=R.filter(r=>vis(r.n)),P=pending(),np=P.rec+P.str+P.lb;let h="";
+  if(S.tab==="sum"){
+    const all=Object.values(t),sum=k=>all.reduce((a,x)=>a+x[k],0);
+    if(isAcc())h=cards([["Approved incentive",inr(sum("total")),"g","Ready to pay"],["Automatic",inr(sum("net")+sum("ms")),"","Net refill and milestones"],["Approved by Accounts",inr(sum("rec")+sum("str")+sum("lb")),"","Records, streaks, prizes"],["Approvals needed",np,np?"a":"",np?inr(all.reduce((a,x)=>a+x.p.rec+x.p.str+x.p.lb,0))+" waiting, in yellow below":"Nothing waiting"]]);
+    else{const m=t[me()];h=cards([["Your approved incentive",inr(m.total),"g"],["Net refill",inr(m.net)],["Milestone",inr(m.ms)],["Bonuses and prizes",inr(m.rec+m.str+m.lb)]]);}
+    h+=`<div class="panel"><div class="head"><div><h2>${isAcc()?"Payout by refiller":"Your incentive breakdown"}</h2><p class="note">${isAcc()?"A figure in yellow is the amount assigned to that incentive and still waiting for your approval. It is not part of Total approved until you approve it.":"Only amounts approved by Accounts are shown. Status reads Approved once nothing of yours is waiting."}</p></div>${isAcc()?'<button class="b" data-csv="1">Export CSV</button>':""}</div>`+
+    tbl(["Refiller","Net refill","Record breaker","Milestone","Streak","Leaderboard","Total approved","Status"],
+      rs.map(r=>{const x=t[r.n],cell=k=>!isAcc()||!x.p[k]?`<td>${inr(x[k])}</td>`:x[k]?`<td>${inr(x[k])}<div class="amb small">+ ${inr(x.p[k])} waiting</div></td>`:`<td class="amb">${inr(x.p[k])}</td>`;return `<tr><td class="l">${who(r.n)} <span class="chip ${r.role}">${r.role}</span></td><td>${inr(x.net)}</td>${cell("rec")}<td>${inr(x.ms)}</td>${cell("str")}${cell("lb")}<td class="pos">${inr(x.total)}</td><td>${x.wait.length?`<span class="chip pending">${isAcc()?"Needs approval":"Under review"}</span>`:'<span class="chip approved">Approved</span>'}</td></tr>`;}).join(""),"",
+      isAcc()?`<tr><td class="l">Total</td><td>${inr(sum("net"))}</td><td>${inr(sum("rec"))}</td><td>${inr(sum("ms"))}</td><td>${inr(sum("str"))}</td><td>${inr(sum("lb"))}</td><td class="pos">${inr(sum("total"))}</td><td></td></tr>`:"")+`</div>`;}
+  if(S.tab==="net"){
+    const myRole=isAcc()?null:R.find(r=>r.n===me()).role;
+    h=(isAcc()?setbox("rate","Rate per net unit","Set the rate for each role. The table below updates as soon as you save.",[["Leader","Leader (paise per unit)"],["Refiller","Refiller (paise per unit)"]]):"")+
+    `<div class="panel"><h2>Net refill incentive</h2><p class="note">Net units = filled − removed, counted from each refiller's own refills. Paid automatically, no approval.</p>
+    <div class="rules">${isAcc()?`<span class="badge">Leader · ${CFG.rate.Leader} paise per net unit</span><span class="badge">Refiller · ${CFG.rate.Refiller} paise per net unit</span>`:`<span class="badge">Your rate · ${myRole} · ${CFG.rate[myRole]} paise per net unit</span>`}</div>`+
+    tbl(["Refiller","Role","Filled","Removed","Net units","Rate","Incentive"],rs.map((r,i)=>`<tr><td class="l"><button class="b link" data-open="${i}" aria-expanded="${!!S.open[i]}">${S.open[i]?"▾":"▸"} <b>${r.n}</b></button></td><td class="l"><span class="chip ${r.role}">${r.role}</span></td><td>${r.filled}</td><td>${r.removed}</td><td>${r.net}</td><td>${CFG.rate[r.role]} paise</td><td class="pos">${inr(r.inc)}</td></tr>`+
+      (S.open[i]?r.m.map(x=>`<tr class="sub"><td class="l" colspan="2">${x[0]}</td><td>${x[1]}</td><td>${x[2]}</td><td>${x[1]-x[2]}</td><td></td><td>${inr(Math.round((x[1]-x[2])*CFG.rate[r.role]))}</td></tr>`).join(""):"")).join(""),"",
+      isAcc()?`<tr><td class="l" colspan="2">Total</td><td>${R.reduce((a,r)=>a+r.filled,0)}</td><td>${R.reduce((a,r)=>a+r.removed,0)}</td><td>${R.reduce((a,r)=>a+r.net,0)}</td><td></td><td class="pos">${inr(R.reduce((a,r)=>a+r.inc,0))}</td></tr>`:"")+`<p class="note" style="margin:12px 0 0">Select a name to see the machines behind the number.</p></div>`;}
+  if(S.tab==="rec"){
+    const list=recs.map((c,i)=>({c,i})).filter(({c})=>isAcc()||(ok(c.status)&&c.to.includes(me())));
+    h=(isAcc()?setbox("rec","Record breaker bonuses","Set the bonus for each record type. It shows against every claim below; when a cluster breaks its record, every member of that cluster gets the cluster bonus, approved person by person. Claims already approved keep the amount they were approved at.",[["ir","Individual · net refill (₹)"],["is","Individual · net sale (₹)"],["cr","Cluster · net refill (₹)"],["cs","Cluster · net sale (₹)"]]):"")+
+    `<div class="panel"><h2>Record breaker</h2><p class="note">Compared with the same month last year (September 2025). ${isAcc()?"Approve each claim, or reject it with a reason.":"Only records approved by Accounts are shown to you."}</p>`+
+    tbl(["Record","Who","This month","Last year","Growth","Bonus","Status"].concat(isAcc()?["Decision"]:[]),list.map(({c,i})=>{
+      const b=recBonus(c);
+      return `<tr><td class="l">${KIND[c.k]}</td><td class="l">${who(c.who)}${c.grp?`<div class="mute small">${c.grp} · all ${c.cnt} members are rewarded</div>`:""}</td><td>${c.cur}</td><td>${c.base}</td><td class="pos">${c.g}</td><td>${inr(b)}</td><td>${chip(c.status)}${c.why&&c.status==="rejected"?`<div class="mute small">${esc(c.why)}</div>`:""}</td>${isAcc()?`<td>${open(c.status)?`<div class="acts">${field("rec",i,"why",c,"Reason, if rejecting","Reason for "+c.who,"why")}${btn("rec",i,"approved","Approve","ok")}${btn("rec",i,"rejected","Reject","no")}</div><div class="err" role="alert">${c.err||""}</div>`:btn("rec",i,"undo","Undo")}</td>`:""}</tr>`;}).join(""),"No approved records yet.")+`</div>`;}
+  if(S.tab==="mil"){
+    h=(isAcc()?setbox("tier","Milestone bonuses","Set the bonus for each growth tier. The highest tier reached is paid automatically; no approval is needed.",[[0,"10% growth (₹)"],[1,"20% growth (₹)"],[2,"30% growth (₹)"]]):"")+
+    `<div class="panel"><h2>Milestones: growth over last month</h2><p class="note">Net refill this month against the previous month (August 2026). The highest tier reached is paid. Automatic, no approval.</p>
+    <div class="rules">${PCT.map((p,i)=>`<span class="badge">${p}% → ${inr(CFG.tier[i])}</span>`).join("")}</div>`+
+    tbl(["Refiller","August 2026 net","September 2026 net","Growth","Progress to 30%","Bonus"],rs.map(r=>`<tr><td class="l">${who(r.n)}<div class="mute small">${r.next?(r.next.need+" more units for "+r.next.pct+"% → "+inr(r.next.bonus)):"Top tier reached"}</div></td><td>${r.ly}</td><td>${r.net}</td><td class="${r.g<0?"neg":""}">${r.g>=0?"+":""}${r.g.toFixed(1)}%</td><td><div class="prog" role="img" aria-label="${r.g.toFixed(1)} percent growth of 30 percent top tier"><i style="width:${Math.max(0,Math.min(100,r.g/30*100))}%"></i><s style="left:33.3%"></s><s style="left:66.6%"></s></div><div class="ticks"><span>0</span><span>10%</span><span>20%</span><span>30%</span></div></td><td class="${r.ms?"pos":"mute"}">${r.ms?inr(r.ms):"–"}</td></tr>`).join(""))+`</div>`;}
+  if(S.tab==="str"){
+    const list=strk.map((s,i)=>({s,i})).filter(({s})=>vis(s.n));
+    h=(isAcc()?setbox("str","Streak bonus","Set the bonus for a full-month streak. It shows against every eligible person below. Streaks already approved keep the amount they were approved at.",[["bonus","Streak bonus (₹)"]]):"")+
+    `<div class="panel"><h2>Streaks: full calendar month, no leave</h2><p class="note">One half day is allowed. Two or more half days need an Accounts decision. Any full leave means no bonus. ${isAcc()?"Approve each person, or deny with a reason.":"The bonus appears once Accounts approves it."}</p>`+
+    tbl(["Refiller","Days worked","Half days","Leaves","Attendance","Bonus","Result"].concat(isAcc()?["Decision"]:[]),list.map(({s,i})=>{
+      const show=isAcc()||ok(s.status)||s.status==="na"||s.status==="denied";
+      return `<tr><td class="l">${who(s.n)}</td><td>${s.days} / ${s.work}</td><td>${s.half}</td><td>${s.leave}</td><td><div class="prog" role="img" aria-label="${s.days} of ${s.work} days"><i style="width:${s.days/s.work*100}%"></i></div></td><td class="${ok(s.status)?"pos":""}">${ok(s.status)?inr(s.bonus):isAcc()&&open(s.status)?inr(CFG.str.bonus):"–"}</td><td class="l">${show?chip(s.status)+(s.why&&s.status==="denied"?`<div class="mute small">${esc(s.why)}</div>`:""):'<span class="mute">Under review</span>'}</td>${isAcc()?`<td>${open(s.status)?`<div class="acts">${field("str",i,"why",s,"Reason, if denying","Reason for "+s.n,"why")}${btn("str",i,"approved",s.status==="decision"?"Approve anyway":"Approve","ok")}${btn("str",i,"denied","Deny","no")}</div><div class="err" role="alert">${s.err||""}</div>`:s.status==="na"?"":btn("str",i,"undo","Undo")}</td>`:""}</tr>`;}).join(""))+`</div>`;}
+  if(S.tab==="lb"){
+    const b=boards[S.bd],mon=S.bd==="monthly",accM=isAcc()&&mon;
+    const rows=b.rows.map(([n,u],i)=>({n,u,i,o:lbw[i]})).filter(x=>vis(x.n));
+    h=(isAcc()?setbox("prize","Monthly leaderboard prizes","Set the prize for each rank. Prizes are paid on the month-end board only; daily and weekly boards show ranks without prizes.",[0,1,2,3,4].map(i=>[i,"Rank #"+(i+1)+" (₹)"])):"")+
+    `<div class="bar"><div class="seg" role="group" aria-label="Board">${Object.keys(boards).map(k=>`<button data-bd="${k}" aria-pressed="${k===S.bd}">${k[0].toUpperCase()+k.slice(1)}${isAcc()&&k==="monthly"&&P.lb?`<span class="count">${P.lb}</span>`:""}</button>`).join("")}</div></div>
+    <div class="panel"><h2>Leaderboard · ${b.label}</h2><p class="note">${isAcc()?"Top 5 by net refill units.":"Your own rank by net refill units. Other people's results are visible to Accounts only."} ${mon?(isAcc()?"The prizes set above show against each rank. Approve or reject each person's prize.":"Your prize appears after Accounts approves it."):"Ranks only. Prizes are given on the month-end board, not daily or weekly."}</p>`+
+    tbl(["Rank","Refiller","Net units"].concat(mon?["Prize"]:[]).concat(accM?["Status","Decision"]:[]),rows.map(({n,u,i,o})=>`<tr><td class="l"><span class="rank r${i+1}">#${i+1}</span></td><td class="l">${who(n)}${isAcc()?"":' <span class="mute small">you · of '+b.rows.length+"</span>"}</td><td>${u}</td>${mon?`<td class="${ok(o.status)?"pos":""}">${ok(o.status)?inr(o.prize):isAcc()&&open(o.status)?inr(CFG.prize[i]):"–"}</td>`:""}${accM?`<td>${chip(o.status)}${o.why&&o.status==="rejected"?`<div class="mute small">${esc(o.why)}</div>`:""}</td><td>${open(o.status)?`<div class="acts">${field("lb",i,"why",o,"Reason, if rejecting","Reason for "+n,"why")}${btn("lb",i,"approved","Approve","ok")}${btn("lb",i,"rejected","Reject","no")}</div><div class="err" role="alert">${o.err||""}</div>`:btn("lb",i,"undo","Undo")}</td>`:""}</tr>`).join("")+
+      (isAcc()&&b.rows.length<5?`<tr><td class="l mute">#5</td><td class="l mute" colspan="${accM?5:mon?3:2}">No qualifier${mon?" · "+inr(CFG.prize[4])+" not paid":""}</td></tr>`:""))+`</div>`;}
+  $("view").innerHTML=h;
+  $("tabs").innerHTML=TABS.map(([k,l])=>`<button class="tab" role="tab" data-tab="${k}" aria-selected="${k===S.tab}">${l}${isAcc()&&P[k]?`<span class="count" aria-label="${P[k]} to review">${P[k]}</span>`:""}</button>`).join("");
+  document.querySelectorAll("[data-v]").forEach(b=>b.setAttribute("aria-pressed",b.dataset.v===S.v));
+  const mine=isAcc()?np:t[me()].wait.length;$("mstate").textContent=isAcc()?(np?np+" approvals pending":"Ready to finalise"):(mine?"Under review":"Approved");$("mstate").style.color=mine?"var(--amber)":"var(--green)";
+  $("vnote").textContent=isAcc()?"Accounts sets rates, bonuses and prizes, and approves.":"Sees only their own data and rate, and only amounts Accounts has approved. Nobody else's figures are shown.";
+}
+const target=(k,i)=>k==="rec"?recs[+i]:k==="str"?strk[+i]:lbw[+i];
+function decide(k,i,a){const o=target(k,i);o.err="";
+  if(a==="undo"){o.status=o.orig;return;}
+  if(a==="approved"){
+    if(k==="rec")o.bonus=CFG.rec[o.k];
+    else if(k==="lb")o.prize=CFG.prize[o.i];
+    else o.bonus=CFG.str.bonus;
+    o.status="approved";return;}
+  if(!(o.why||"").trim()){o.err="Enter a reason first";return;}
+  o.status=a;}
+/* Validate a settings box as a whole, then apply it. */
+function save(g){const keys=Object.keys(D[g]),rate=g==="rate",vals=keys.map(k=>rate?toNum(D[g][k]):toPaise(D[g][k]));
+  if(vals.some(v=>v===null||v<=0)){M[g]={bad:1,t:rate?"Enter a rate above 0 for both roles":"Enter an amount above 0 in every box"};return;}
+  keys.forEach((k,j)=>{CFG[g][k]=vals[j];});M[g]={t:"Saved"};}
+function csv(){const t=totals(),q=s=>'"'+String(s).replace(/"/g,'""')+'"',r2=p=>(p/100).toFixed(2);
+  const lines=[["Refiller","Role","Net refill","Record breaker","Milestone","Streak","Leaderboard","Total approved","Status"]].concat(R.map(r=>{const x=t[r.n];return [r.n,r.role,r2(x.net),r2(x.rec),r2(x.ms),r2(x.str),r2(x.lb),r2(x.total),x.wait.length?"Needs approval":"Approved"];}));
+  const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([lines.map(l=>l.map(q).join(",")).join("\n")],{type:"text/csv"}));a.download="incentive-2026-09.csv";a.click();URL.revokeObjectURL(a.href);}
+document.addEventListener("input",e=>{const ds=e.target.dataset;
+  if(ds.s){const[g,k]=ds.s.split("|");D[g][k]=e.target.value;if(M[g]){delete M[g];const m=e.target.closest(".set").querySelector(".msg");if(m)m.textContent="";}return;}
+  if(!ds.d)return;const[k,i,f]=ds.d.split("|"),o=target(k,i);o[f]=e.target.value;
+  if(o.err){o.err="";const box=e.target.closest("td,.panel").querySelector(".err");if(box)box.textContent="";}});
+document.addEventListener("click",e=>{const t=e.target.closest("button");if(!t)return;
+  if(t.dataset.tab)S.tab=t.dataset.tab;else if(t.dataset.v)S.v=t.dataset.v;else if(t.dataset.bd)S.bd=t.dataset.bd;
+  else if(t.dataset.open)S.open[t.dataset.open]=!S.open[t.dataset.open];
+  else if(t.dataset.save)save(t.dataset.save);
+  else if(t.dataset.csv){csv();return;}
+  else if(t.dataset.a){const[k,i,a]=t.dataset.a.split("|");decide(k,i,a);}
+  else return;
+  view();});
+view();
+</script>
+</body>
+</html>
